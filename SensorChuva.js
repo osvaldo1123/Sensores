@@ -1,5 +1,6 @@
 class YL83 {
     constructor() {
+    // Sensor de presença de chuva baseado no modelo YL83   
     // Define os valores iniciais
       this.isChuva = false;
       this.analogValor = 1023; // 1023 sendo seco, quanto menor o número, mais molhado
