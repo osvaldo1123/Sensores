@@ -5,9 +5,7 @@ class MAX44009 {
       this.luxAtual = this.minLux;
     }
   
-    // Method to simulate lux measurement
     sensorLux() {
-      // Generate a random lux value within range, adjust based on simulated environment
       this.luxAtual = this.minLux + Math.random() * (this.maxLux - this.minLux);
       return this.luxAtual;
     }
