@@ -6,7 +6,7 @@ const port = 3000;
 
 app.use(bodyParser.json());
 
-// DHT11
+//Valores máximos e mínimos de um sensor DHT11
 class DHT11 {
   constructor() {
     this.minTemp = 0;
@@ -17,21 +17,27 @@ class DHT11 {
 
   //GET para cada funcionalidade, utilizando o valor recebido como base
   getTemp(baseValue = null) {
+    // Gera um valor dentro dos valores de temperatura que podem ser medidos em um DHT11
     const baseTemp = baseValue !== null ? baseValue : Math.random() * (this.maxTemp - this.minTemp) + this.minTemp;
+    // Acuracia de +-2 graus
     const accError = (Math.random() * 4 - 2).toFixed(1);
+    // Valor final somando a temperatura com a margem de erro
     const finalTemp = parseFloat(baseTemp) + parseFloat(accError);
     return Math.min(Math.max(finalTemp, this.minTemp), this.maxTemp).toFixed(1);
   }
   
   getUmid(baseValue = null) {
+    // Gera um valor dentro dos valores de umidade  que podem ser medidos em um DHT11
     const baseUmid = baseValue !== null ? baseValue : Math.random() * (this.maxUmid - this.minUmid) + this.minUmid;
+    // Acuracia de +-5 porcento
     const accError = (Math.random() * 10 - 5).toFixed(1);
+    // Valor final somando a umidade com a margem de erro
     const finalUmid = parseFloat(baseUmid) + parseFloat(accError);
     return Math.min(Math.max(finalUmid, this.minUmid), this.maxUmid).toFixed(1);
   }
   
 
-  //Guarda os valores recebidos
+  //Simula uma leitura do sensor gerando os valores de umidade, temperatura, e também pegando a timestamp do momento da leitura
   readSensorData() {
     const now = new Date();
     const temp = this.getTemp();
