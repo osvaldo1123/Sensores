@@ -248,7 +248,7 @@ class ApiMiddleware {
         });
     }
 
-    startTrapEvaluation(interval = 10000) {
+    startTrap(interval = 10000) {
         setInterval(() => {
             this.checkTrap();
         }, interval);
@@ -281,7 +281,7 @@ app.post('/sensor-set', express.json(), (req, res) => {
         return res.status(400).json({ message: "Input Invalido" });
     }
 
-    const results = updates.map(update => {
+    const result = updates.map(update => {
         const { sensorId, newValue, newMin, newMax } = update;
         try {
             const sensor = middleware.sensors.find(s => s.id === sensorId);
@@ -291,20 +291,20 @@ app.post('/sensor-set', express.json(), (req, res) => {
             if (newMin !== undefined) sensor[`min${inicialMaiuscula(sensor.tipo)}`] = newMin;
             if (newMax !== undefined) sensor[`max${inicialMaiuscula(sensor.tipo)}`] = newMax;
 
-            let message = `Sensor ${sensorId} atualizado`;
-            if (newValue !== undefined) message += ` Valor setado para ${newValue}.`;
+            let mensagem = `Sensor ${sensorId} atualizado`;
+            if (newValue !== undefined) mensagem += ` Valor setado para ${newValue}.`;
             if (newMin !== undefined || newMax !== undefined) {
-                message += ` Alcance setado para [${sensor[`min${inicialMaiuscula(sensor.tipo)}`]}, ${sensor[`max${inicialMaiuscula(sensor.tipo)}`]}].`;
+                mensagem += ` Alcance setado para [${sensor[`min${inicialMaiuscula(sensor.tipo)}`]}, ${sensor[`max${inicialMaiuscula(sensor.tipo)}`]}].`;
             }
 
-            return { sensorId, status: "ok", message };
+            return { sensorId, status: "ok", mensagem };
         } catch (error) {
             return { sensorId, status: "erro", message: error.message };
         }
     });
 
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({ results }, null, 2));     
+    res.send(JSON.stringify({ result }, null, 2));     
 });
 
 // Rota TRAP
@@ -327,7 +327,7 @@ app.post('/sensor-response', express.json(), (req, res) => {
     res.send(JSON.stringify({ payload }, null, 2));     
 });
 
-middleware.startTrapEvaluation(10000);
+middleware.startTrap(10000);
 
 app.listen(port, () => {
     console.log(`Server Port: http://localhost:${port}`);
